@@ -12,4 +12,6 @@ pub struct Ticket {
 
 impl HasID for Ticket {
   fn id(&self) -> usize { self.id }
+
+  fn with_id(self, id: usize) -> Self { Ticket { id, ..self } }
 }

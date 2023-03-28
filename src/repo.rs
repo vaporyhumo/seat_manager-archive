@@ -6,6 +6,8 @@ pub struct Repo<A> {
 
 pub trait HasID {
   fn id(&self) -> usize;
+
+  fn with_id(self, id: usize) -> Self;
 }
 
 impl<A> Repo<A>
@@ -62,6 +64,7 @@ where
   fn clear(&self) { self.lock().unwrap().clear() }
 
   fn create(&self, record: A) -> Result<(), String> {
+    let record: A = record.with_id(self.next_id());
     self.lock().unwrap().push(record);
     Ok(())
   }

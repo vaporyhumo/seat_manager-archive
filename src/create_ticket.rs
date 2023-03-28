@@ -14,7 +14,7 @@ pub fn create_ticket(
   let from_stop: usize = stops.0;
   let to_stop: usize = stops.1;
   let ticket: Ticket = Ticket {
-    id: TICKETS.next_id(),
+    id: 0,
     trip_id,
     from_stop,
     seat,

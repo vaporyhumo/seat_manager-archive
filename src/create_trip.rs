@@ -1,8 +1,7 @@
 use crate::{repo::MutexRepo, Trip, TRIPS};
 
 pub fn create_trip(seat_count: usize, stop_count: usize) {
-  let id = TRIPS.next_id();
-  TRIPS.lock().unwrap().push(Trip { id, seat_count, stop_count });
+  TRIPS.create(Trip { id: 0, seat_count, stop_count }).unwrap();
 }
 
 // tests

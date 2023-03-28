@@ -9,4 +9,6 @@ pub struct Trip {
 
 impl HasID for Trip {
   fn id(&self) -> usize { self.id }
+
+  fn with_id(self, id: usize) -> Self { Trip { id, ..self } }
 }

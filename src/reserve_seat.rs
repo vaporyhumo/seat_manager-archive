@@ -2,7 +2,7 @@ use std::ops::Range;
 
 use crate::{
   build_seat_map::{build_seat_map, SeatMap},
-  SeatReservation, Trip, SEAT_RESERVATIONS, TRIPS,
+  SeatReservation, Trip, SEAT_RESERVATIONS, TRIPS, repo::MutexRepo,
 };
 
 pub fn reserve_seat(
@@ -27,8 +27,8 @@ pub fn reserve_seat(
     }
   }
 
-  SEAT_RESERVATIONS.lock().unwrap().push(SeatReservation {
-    id: 1,
+  SEAT_RESERVATIONS.create(SeatReservation {
+    id: 0,
     trip_id,
     user_id,
     seat,
@@ -36,7 +36,7 @@ pub fn reserve_seat(
     stop_count,
     from_stop,
     to_stop,
-  });
+  })?;
   Ok(())
 }
 

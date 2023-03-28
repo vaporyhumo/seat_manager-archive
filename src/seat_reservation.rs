@@ -14,4 +14,6 @@ pub struct SeatReservation {
 
 impl HasID for SeatReservation {
   fn id(&self) -> usize { self.id }
+
+  fn with_id(self, id: usize) -> Self { SeatReservation { id, ..self } }
 }
