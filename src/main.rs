@@ -5,15 +5,18 @@ mod repo;
 mod reserve_seat;
 mod seat_reservation;
 mod ticket;
-mod ticket_repo;
 mod trip;
-mod trip_repo;
 
 use {
-  build_seat_map::SeatMap, create_ticket::create_ticket,
-  create_trip::create_trip, repo::Repo, reserve_seat::reserve_seat,
-  seat_reservation::SeatReservation, std::sync::Mutex, ticket::Ticket,
-  trip::Trip, trip_repo::TripRepo,
+  build_seat_map::SeatMap,
+  create_ticket::create_ticket,
+  create_trip::create_trip,
+  repo::{MutexRepo, Repo},
+  reserve_seat::reserve_seat,
+  seat_reservation::SeatReservation,
+  std::sync::Mutex,
+  ticket::Ticket,
+  trip::Trip,
 };
 
 type Srr = Mutex<Repo<SeatReservation>>;

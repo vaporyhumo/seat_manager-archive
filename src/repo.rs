@@ -1,3 +1,5 @@
+use std::sync::Mutex;
+
 pub struct Repo<A> {
   pub records: Vec<A>,
 }
@@ -20,7 +22,7 @@ where
     self.records.iter().find(|record| record.id() == id).cloned()
   }
 
-  pub fn _last(&self) -> Option<A> { self.records.last().cloned() }
+  pub fn last(&self) -> Option<A> { self.records.last().cloned() }
 
   pub fn next_id(&self) -> usize {
     self
@@ -30,5 +32,37 @@ where
       .max()
       .map(|id| id + 1)
       .unwrap_or(1)
+  }
+
+  pub fn clear(&mut self) { self.records.clear() }
+}
+
+pub trait MutexRepo<A> {
+  fn first(&self) -> Option<A>;
+
+  fn last(&self) -> Option<A>;
+
+  fn next_id(&self) -> usize;
+
+  fn clear(&self);
+
+  fn create(&self, record: A) -> Result<(), String>;
+}
+
+impl<A> MutexRepo<A> for Mutex<Repo<A>>
+where
+  A: Clone + HasID,
+{
+  fn first(&self) -> Option<A> { self.lock().unwrap().first() }
+
+  fn last(&self) -> Option<A> { self.lock().unwrap().last() }
+
+  fn next_id(&self) -> usize { self.lock().unwrap().next_id() }
+
+  fn clear(&self) { self.lock().unwrap().clear() }
+
+  fn create(&self, record: A) -> Result<(), String> {
+    self.lock().unwrap().push(record);
+    Ok(())
   }
 }

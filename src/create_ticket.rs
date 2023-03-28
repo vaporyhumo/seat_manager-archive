@@ -1,5 +1,5 @@
 use crate::{
-  seat_reservation::SeatReservation, ticket::Ticket, ticket_repo::TicketRepo,
+  repo::MutexRepo, seat_reservation::SeatReservation, ticket::Ticket,
   SEAT_RESERVATIONS, TICKETS,
 };
 
