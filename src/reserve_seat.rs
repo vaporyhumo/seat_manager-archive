@@ -2,7 +2,8 @@ use std::ops::Range;
 
 use crate::{
   build_seat_map::{build_seat_map, SeatMap},
-  SeatReservation, Trip, SEAT_RESERVATIONS, TRIPS, repo::MutexRepo,
+  repo::MutexRepo,
+  SeatReservation, Trip, SEAT_RESERVATIONS, TRIPS,
 };
 
 pub fn reserve_seat(
@@ -17,15 +18,9 @@ pub fn reserve_seat(
   let stop_count: usize = trip.stop_count;
   let from_stop: usize = stops.0;
   let to_stop: usize = stops.1;
-  let reserved = seat_request(seat_count, stop_count, seat, from_stop, to_stop);
+  let reservation: Vec<bool> = seat_request(seat_count, stop_count, seat, from_stop, to_stop);
 
-  for (is_reserved, is_available) in
-    reserved.iter().zip(seat_map.available.iter())
-  {
-    if let (true, false) = (is_reserved, is_available) {
-      return Err(String::from("Seat is not available"));
-    }
-  }
+  check_availabilty(reservation, seat_map)?;
 
   SEAT_RESERVATIONS.create(SeatReservation {
     id: 0,
@@ -36,7 +31,15 @@ pub fn reserve_seat(
     stop_count,
     from_stop,
     to_stop,
-  })?;
+  })
+}
+
+fn check_availabilty(reservation: Vec<bool>, seat_map: SeatMap) -> Result<(), String> {
+  for (is_reserved, is_available) in reservation.iter().zip(seat_map.available.iter()) {
+    if let (true, false) = (is_reserved, is_available) {
+      return Err(String::from("Seat is not available"));
+    }
+  }
   Ok(())
 }
 
@@ -49,8 +52,7 @@ fn seat_request(
 ) -> Vec<bool> {
   let mut seat_request: Vec<bool> = vec![false; seat_count * stop_count];
 
-  let range: Range<usize> =
-    (seat * stop_count + from_stop)..(seat * stop_count + to_stop);
+  let range: Range<usize> = (seat * stop_count + from_stop)..(seat * stop_count + to_stop);
   for i in range {
     seat_request[i] = true;
   }

@@ -67,10 +67,9 @@ pub fn build_seat_map(trip_id: usize) -> SeatMap {
 
 impl SeatReservation {
   pub fn reserved(&self) -> Vec<bool> {
-    let mut reserved: Vec<bool> =
-      vec![false; self.seat_count * self.stop_count];
-    let range: Range<usize> = (self.seat * self.stop_count + self.from_stop)
-      ..(self.seat * self.stop_count + self.to_stop);
+    let mut reserved: Vec<bool> = vec![false; self.seat_count * self.stop_count];
+    let range: Range<usize> =
+      (self.seat * self.stop_count + self.from_stop)..(self.seat * self.stop_count + self.to_stop);
     for i in range {
       reserved[i] = true;
     }

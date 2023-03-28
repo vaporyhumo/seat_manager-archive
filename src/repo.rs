@@ -27,13 +27,7 @@ where
   pub fn last(&self) -> Option<A> { self.records.last().cloned() }
 
   pub fn next_id(&self) -> usize {
-    self
-      .records
-      .iter()
-      .map(|record| record.id())
-      .max()
-      .map(|id| id + 1)
-      .unwrap_or(1)
+    self.records.iter().map(|record| record.id()).max().map(|id| id + 1).unwrap_or(1)
   }
 
   pub fn clear(&mut self) { self.records.clear() }
