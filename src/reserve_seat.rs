@@ -16,9 +16,7 @@ pub fn reserve_seat(
   let seat_map: SeatMap = build_seat_map(trip_id);
   let seat_count: usize = trip.seat_count;
   let stop_count: usize = trip.stop_count;
-  let from_stop: usize = stops.0;
-  let to_stop: usize = stops.1;
-  let reservation: Vec<bool> = seat_request(seat_count, stop_count, seat, from_stop, to_stop);
+  let reservation: Vec<bool> = seat_request(seat_count, stop_count, seat, stops);
 
   check_availabilty(reservation, seat_map)?;
 
@@ -29,8 +27,7 @@ pub fn reserve_seat(
     seat,
     seat_count,
     stop_count,
-    from_stop,
-    to_stop,
+    stops,
   })
 }
 
@@ -47,12 +44,11 @@ fn seat_request(
   seat_count: usize,
   stop_count: usize,
   seat: usize,
-  from_stop: usize,
-  to_stop: usize,
+  stops: (usize, usize),
 ) -> Vec<bool> {
   let mut seat_request: Vec<bool> = vec![false; seat_count * stop_count];
 
-  let range: Range<usize> = (seat * stop_count + from_stop)..(seat * stop_count + to_stop);
+  let range: Range<usize> = (seat * stop_count + stops.0)..(seat * stop_count + stops.1);
   for i in range {
     seat_request[i] = true;
   }

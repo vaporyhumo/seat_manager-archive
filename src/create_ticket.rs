@@ -12,7 +12,7 @@ pub fn create_ticket(
 ) -> Result<(), String> {
   let from_stop: usize = stops.0;
   let to_stop: usize = stops.1;
-  let ticket: Ticket = Ticket { id: 0, trip_id, from_stop, seat, to_stop, user_id };
+  let ticket: Ticket = Ticket { id: 0, trip_id, seat, stops, user_id };
 
   let seat_reservation: Option<SeatReservation> = SEAT_RESERVATIONS
     .lock()
@@ -20,7 +20,10 @@ pub fn create_ticket(
     .records
     .iter()
     .find(|sr| {
-      sr.trip_id == trip_id && sr.seat == seat && sr.from_stop == from_stop && sr.to_stop == to_stop
+      sr.trip_id == trip_id
+        && sr.seat == seat
+        && sr.from_stop() == from_stop
+        && sr.to_stop() == to_stop
     })
     .cloned();
 

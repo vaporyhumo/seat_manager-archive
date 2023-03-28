@@ -39,8 +39,8 @@ pub fn build_seat_map(trip_id: usize) -> SeatMap {
     .collect();
 
   tickets.iter().for_each(|ticket| {
-    let range: Range<usize> = (ticket.seat * trip.stop_count + ticket.from_stop)
-      ..(ticket.seat * trip.stop_count + ticket.to_stop);
+    let range: Range<usize> = (ticket.seat * trip.stop_count + ticket.from_stop())
+      ..(ticket.seat * trip.stop_count + ticket.to_stop());
 
     for i in range {
       available[i] = false;
@@ -68,8 +68,8 @@ pub fn build_seat_map(trip_id: usize) -> SeatMap {
 impl SeatReservation {
   pub fn reserved(&self) -> Vec<bool> {
     let mut reserved: Vec<bool> = vec![false; self.seat_count * self.stop_count];
-    let range: Range<usize> =
-      (self.seat * self.stop_count + self.from_stop)..(self.seat * self.stop_count + self.to_stop);
+    let range: Range<usize> = (self.seat * self.stop_count + self.from_stop())
+      ..(self.seat * self.stop_count + self.to_stop());
     for i in range {
       reserved[i] = true;
     }

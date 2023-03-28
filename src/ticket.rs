@@ -6,8 +6,13 @@ pub struct Ticket {
   pub trip_id: usize,
   pub user_id: usize,
   pub seat: usize,
-  pub from_stop: usize,
-  pub to_stop: usize,
+  pub stops: (usize, usize),
+}
+
+impl Ticket {
+  pub fn from_stop(&self) -> usize { self.stops.0 }
+
+  pub fn to_stop(&self) -> usize { self.stops.1 }
 }
 
 impl HasID for Ticket {
