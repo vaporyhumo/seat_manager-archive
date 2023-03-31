@@ -35,6 +35,8 @@ fn main() -> Result<(), String> {
   create_ticket(seat, stops, trip_id, user_id)?;
 
   let seat_map: SeatMap = build_seat_map::build_seat_map(trip.id);
+
   println!("{:#?}", seat_map);
+
   Ok(())
 }

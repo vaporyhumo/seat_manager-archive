@@ -10,8 +10,6 @@ pub fn create_ticket(
   trip_id: usize,
   user_id: usize,
 ) -> Result<(), String> {
-  let from_stop: usize = stops.0;
-  let to_stop: usize = stops.1;
   let ticket: Ticket = Ticket { id: 0, trip_id, seat, stops, user_id };
 
   let seat_reservation: Option<SeatReservation> = SEAT_RESERVATIONS
@@ -22,8 +20,8 @@ pub fn create_ticket(
     .find(|sr| {
       sr.trip_id == trip_id
         && sr.seat == seat
-        && sr.from_stop() == from_stop
-        && sr.to_stop() == to_stop
+        && sr.from_stop() == stops.0
+        && sr.to_stop() == stops.1
     })
     .cloned();
 
@@ -32,7 +30,7 @@ pub fn create_ticket(
     None => {
       return Err(format!(
         "No seat reservation found for trip {}, seat {}, from_stop {}, to_stop {}",
-        trip_id, seat, from_stop, to_stop
+        trip_id, seat, stops.0, stops.1
       ))
     }
   }
